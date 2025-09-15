@@ -314,14 +314,20 @@ public class Book implements Serializable {
 	 * @param resource
 	 * @return The table of contents
 	 */
-	public TOCReference addSection(TOCReference parentSection, String sectionTitle,
-			Resource resource) {
+	public TOCReference addSection(TOCReference parentSection, String sectionTitle,Resource resource) {
 		getResources().add(resource);
 		if (spine.findFirstResourceById(resource.getId()) < 0)  {
 			spine.addSpineReference(new SpineReference(resource));
 		}
 		return parentSection.addChildSection(new TOCReference(sectionTitle, resource));
 	}
+    public TOCReference addSection(TOCReference parentSection, String sectionTitle,Resource resource, String fragmentId) {
+        getResources().add(resource);
+        if (spine.findFirstResourceById(resource.getId()) < 0)  {
+            spine.addSpineReference(new SpineReference(resource));
+        }
+        return parentSection.addChildSection(new TOCReference(sectionTitle, resource,fragmentId));
+    }
 
 	public void generateSpineFromTableOfContents() {
 		Spine spine = new Spine(tableOfContents);
@@ -347,7 +353,15 @@ public class Book implements Serializable {
 		}
 		return tocReference;
 	}
-	
+    public TOCReference addSection(String title, Resource resource, String fragmentId) {
+        getResources().add(resource);
+        TOCReference tocReference = tableOfContents.addTOCReference(new TOCReference(title, resource,fragmentId));
+        if (spine.findFirstResourceById(resource.getId()) < 0)  {
+            spine.addSpineReference(new SpineReference(resource));
+        }
+        return tocReference;
+    }
+
 	
 	/**
 	 * The Book's metadata (titles, authors, etc)

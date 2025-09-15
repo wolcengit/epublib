@@ -74,6 +74,14 @@ public class PackageDocumentMetadataWriter extends PackageDocumentBase {
 			serializer.text(book.getMetadata().getLanguage());
 			serializer.endTag(NAMESPACE_DUBLIN_CORE, "language");
 		}
+        // write dc attributes
+        if(book.getMetadata().getDcAttributes() != null) {
+            for (Map.Entry<String, String> mapEntry: book.getMetadata().getDcAttributes().entrySet()){
+                serializer.startTag(NAMESPACE_DUBLIN_CORE, mapEntry.getKey());
+                serializer.text(mapEntry.getValue());
+                serializer.endTag(NAMESPACE_DUBLIN_CORE, mapEntry.getKey());
+            }
+        }
 
 		// write other properties
 		if(book.getMetadata().getOtherProperties() != null) {
